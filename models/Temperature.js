@@ -1,16 +1,19 @@
 const mongoose = require('mongoose');
 const temperatureSchema = new mongoose.Schema({
     values: [{
+        _id: false,
         value: {
             type: Number,
             required: true
         }
     }],
     times: [{
+        _id: false,
         time: {
             type: Number,
             required: true
         }
+        
     }]
 },{timestamps: true},{collection: 'temperature'}
 )

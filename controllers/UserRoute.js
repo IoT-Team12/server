@@ -7,34 +7,55 @@ const auth = require('./middleware/auth')
 
 router.post('/signup', async(req, res) => {
     
-    try {
-        const user = new User(req.body)
-        const token = await user.generateAuthToken()
-        await user
-            .save()
-            .then(()=>{
-            res.send([user, token])
+        const user = new User({
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email
         })
-    } catch (error) {
-        res.status(400).send(error)
-    }
+        if(!req.body.username){
+            res.status(400).send("Invalid username")
+        }
+        else if(!req.body.password){
+            res.status(400).send("Invalid password")
+        }
+        if(!req.body.email){
+            res.status(400).send("Invalid email")
+        }
+        else{
+            try{
+                const token = await user.generateAuthToken()
+                res.send([user, token])
+            }
+            catch(err){
+                res.status(400).json({message: `Error: ${err.message}`});
+            }
+        }
 }) 
 
 router.post('/login', async(req, res) => {
     //Login a registered user
-    const {email, password} = req.body;
-    const user = await User.findOne({email: email})
-    if(!user){
-        res.status(400).json({error: 'Invalid email/password'}).end()
+    if(!req.body.email){
+        res.status(404).send("No email")
     }
-    var enpass = md5(password);
-    if(enpass == user.password){
-        const token = await user.generateAuthToken()
-        console.log(token)
-        res.status(200).send([user, token])
+    else if(!req.body.password){
+        res.status(404).send("No password")
     }
     else{
-        res.status(400).json({error: 'Invalid email/password'}).end()
+        const {email, password} = req.body;
+        const user = await User.findOne({email: email})
+        if(!user){
+            res.status(400).json({error: 'Wrong email/password'}).end()
+        }
+        else{
+            var enpass = md5(password);
+            if(enpass == user.password){
+                const token = await user.generateAuthToken()
+                res.status(200).send([user, token])
+            }
+            else{
+                res.status(400).json({error: 'Wrong email/password'}).end()
+            }
+        }
     }
 })
 
@@ -47,18 +68,6 @@ router.get('/me', auth, async(req, res) => {
     }
 })
 
-router.post('/users/me/logout', auth, async (req, res) => {
-    // Log user out of the application
-    try {
-        req.user.tokens = req.user.tokens.filter((token) => {
-            return token.token != req.token
-        })
-        await req.user.save()
-        res.send()
-    } catch (error) {
-        res.status(500).send(error)
-    }
-})
 
 router.post('/me/logout', auth, async (req, res) => {
     // Log user out of the application

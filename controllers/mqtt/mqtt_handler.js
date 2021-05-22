@@ -38,10 +38,13 @@ class MqttHandler {
             id: newdata.id,
             status: newdata.status
         };
-        Light.findOneAndUpdate({id: newdata.id}, light, {upsert: true}, function(err, doc) {
-            if (err) console.log(err)
-        });
-        
+        console.log(newdata.id)
+        console.log(newdata.status)
+        if(newdata.id!=null && newdata.status!=null){
+          Light.findOneAndUpdate({id: newdata.id}, light, {upsert: true}, function(err, doc) {
+              if (err) console.log(err)
+          });
+        }
         const humidity = await Humidity.findOne({})
         const hvalue = newdata.humidity
         const time = newdata.time
