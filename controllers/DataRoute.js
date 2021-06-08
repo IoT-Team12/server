@@ -6,11 +6,12 @@ const Light = require('../models/Light')
 const Humidity = require('../models/Humidity')
 const Temperature = require('../models/Temperature')
 const User = require('../models/User')
+const mqttClient = require('../app')
 
 var mytopic = '/iot2021/pub'
 
-var mqttClient = new mqttHandler();
-mqttClient.connect();
+// var mqttClient = new mqttHandler();
+// mqttClient.connect();
 
 router.post("/send-mqtt", auth, function(req, res) {
     try{
