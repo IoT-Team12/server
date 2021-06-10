@@ -21,6 +21,11 @@ const temperatureSchema = new mongoose.Schema({
 temperatureSchema.methods.generateValueandTime = async function(value, time) {
     // Generate an auth token for the user
     const temp = this
+    // console.log(temp.values.length);
+    if(temp.values.length >= 100){
+        temp.values = [];
+        temp.times = [];
+    }
     temp.values = temp.values.concat({value})
     temp.times = temp.times.concat({time})
     await temp.save()

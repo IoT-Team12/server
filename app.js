@@ -42,7 +42,8 @@ mqttClient.on('error', (err) => {
 mqttClient.on('message', async function (topic, message) {  
     /* console.log('Received: ' + message.toString() + ' from topic: ' + topic.toString()); */
     let parsedMessage = JSON.parse(message);
-    io.sockets.emit('Alldata', parsedMessage);
+    io.sockets.emit('humidity', parsedMessage.humidity);
+    io.sockets.emit('temperature', parsedMessage.temperature);
     console.log(parsedMessage)
     var newdata = JSON.parse(message)
     var light ={

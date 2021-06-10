@@ -21,6 +21,10 @@ const humiditySchema = new mongoose.Schema({
 humiditySchema.methods.generateValueandTime = async function(value, time) {
     // Generate an auth token for the user
     const humi = this
+    if(humi.values.length >= 100){
+        humi.values = [];
+        humi.times = [];
+    }
     humi.values = humi.values.concat({value})
     humi.times = humi.times.concat({time})
     await humi.save()

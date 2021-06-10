@@ -1,15 +1,62 @@
 <html>
     <head>
-        <script src="socket.io/socket.io.js"></script>
-        <script>
-            var socket = io("http://localhost:3000")
-            socket.on("Alldata", function(data){
-                console.log(data)
-            })
-            // console.log("123")
-        </script>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
     </head>
     <body>
-        Hello
+    <div style="text-align: center;" class="navbar"><span>Humidity</span></div>
+    <div class="wrapper">
+        <div id="chart"></div>
+        <script>
+            Plotly.newPlot('chart',[{
+                    y:[],
+                    type:'line',
+                    line: {
+                    color: 'rgb(128, 0, 128)',
+                }
+            }]);
+            var socket = io("http://localhost:3000")
+            socket.on('humidity', function(data){
+                // return data;
+                console.log(data)              
+                var cnt = 0;
+                Plotly.extendTraces('chart',{ y:[[data]]}, [0]);
+                cnt++;
+                if(cnt > 500) {
+                    Plotly.relayout('chart',{
+                        xaxis: {
+                            range: [cnt-500,cnt]
+                        }
+                    });
+                };
+            })
+        </script>
+    </div>
+    <div style="text-align: center;" class="navbar2"><span>Temperature</span></div>
+    <div class="wrapper2">
+        <div id="chart2"></div>
+        <script>
+            Plotly.newPlot('chart2',[{
+                    y:[],
+                    type:'line'
+                }]);
+            var socket = io("http://localhost:3000")
+            socket.on('temperature', function(data){
+                // return data;
+                console.log(data)              
+                var cnt = 0;
+                Plotly.extendTraces('chart2',{ y:[[data]]}, [0]);
+                cnt++;
+                if(cnt > 500) {
+                    Plotly.relayout('chart2',{
+                        xaxis: {
+                            range: [cnt-500,cnt]
+                        }
+                    });
+                };
+            })
+        </script>
+    </div>
     </body>
 </html>
