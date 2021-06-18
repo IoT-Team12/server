@@ -15,7 +15,8 @@ var mytopic = '/iot2021/pub'
 
 router.post("/send-mqtt/led/1", auth, function(req, res) {
     try{
-        mqttClient.sendLed1((req.body));
+        console.log(req.body.status)
+        mqttClient.sendLed1((req.body.status));
         res.status(201).send(req.body);
     }
     catch(err){
@@ -25,7 +26,8 @@ router.post("/send-mqtt/led/1", auth, function(req, res) {
 
 router.post("/send-mqtt/led/2", auth, function(req, res) {
     try{
-        mqttClient.sendLed2((req.body));
+        console.log(req.body.status)
+        mqttClient.sendLed2((req.body.status));
         res.status(201).send(req.body);
     }
     catch(err){

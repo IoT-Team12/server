@@ -129,12 +129,12 @@ mqttClient.on('message', async function (topic, message) {
     }
 });
 
-mqttClient.sendLed1 = function sendMessage(message){
-    mqttClient.publish(led1SubTopic, JSON.stringify(message));
+mqttClient.sendLed1 = function sendLed1(message){
+    mqttClient.publish(led1Topic, message);
 }
 
-mqttClient.sendLed2 = function sendMessage(message){
-    mqttClient.publish(led2SubTopic, JSON.stringify(message));
+mqttClient.sendLed2 = function sendLed2(message){
+    mqttClient.publish(led2Topic, message);
 }
 
 module.exports = mqttClient;
