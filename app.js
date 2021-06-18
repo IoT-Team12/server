@@ -17,17 +17,30 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
+function strcmp(a, b) {
+    if (a.toString() < b.toString()) return -1;
+    if (a.toString() > b.toString()) return 1;
+    return 0;
+}
+
 var port = process.env.PORT || 3000;
 var server = require("http").Server(app);
 var io = require("socket.io")(server);
 // console.log(process.env.JWT_KEY)
 mqttClient = mqtt.connect('mqtt://broker.hivemq.com:1883');
-subtopic = '/iot2021/pub'
-pubtopic = '/iot2021/sub'
+temperatureTopic = 'group12/dht/temperature'
+humidityTopic = 'group12/dht/humidity'
+led1Topic = 'group12/led/1'
+led2Topic = 'group12/led/2'
+led1SubTopic = 'group12/led/1/pub'
+led2SubTopic = 'group12/led/2/pub'
 
 mqttClient.on('connect', () => {
     console.log('Mqtt connected.')
-    mqttClient.subscribe(pubtopic, {qos: 0});
+    mqttClient.subscribe(temperatureTopic, {qos: 0});
+    mqttClient.subscribe(humidityTopic, {qos: 0});
+    mqttClient.subscribe(led1Topic, {qos: 0});
+    mqttClient.subscribe(led2Topic, {qos: 0});
 })
 
 mqttClient.on('offline', () => {
@@ -40,50 +53,88 @@ mqttClient.on('error', (err) => {
   });
 
 mqttClient.on('message', async function (topic, message) {  
-    /* console.log('Received: ' + message.toString() + ' from topic: ' + topic.toString()); */
-    let parsedMessage = JSON.parse(message);
-    io.sockets.emit('humidity', parsedMessage.humidity);
-    io.sockets.emit('temperature', parsedMessage.temperature);
-    console.log(parsedMessage)
-    var newdata = JSON.parse(message)
-    var light ={
-        id: newdata.id,
-        status: newdata.status
-    };
-    // console.log(newdata.id)
-    // console.log(newdata.status)
-    if(newdata.id!=null && newdata.status!=null){
-        Light.findOneAndUpdate({id: newdata.id}, light, {upsert: true}, function(err, doc) {
-            if (err) console.log(err)
-        });
+   if(strcmp(topic, led1Topic) == 0){
+        // console.log(message.toString())
+        // io.sockets.emit('humidity', parsedMessage.humidity);
+        // io.sockets.emit('temperature', parsedMessage.temperature);
+        var newdata = new Light();
+        newdata.id = 1;
+        if(strcmp(message, 'off') == 0){
+            newdata.status = 'false';
+        }
+        else if(strcmp(message, 'on') == 0){
+            newdata.status = 'true';
+        }
+        var light ={
+            id: newdata.id,
+            status: newdata.status
+        };
+        if(newdata.id!=null && newdata.status!=null){
+            Light.findOneAndUpdate({id: newdata.id}, light, {upsert: true}, function(err, doc) {
+                if (err) console.log(err)
+            });
+        }
+   }
+   if(strcmp(topic, led2Topic) == 0){
+        // console.log(message.toString())
+        // io.sockets.emit('temperature', parsedMessage.temperature);
+        var newdata = new Light();
+        newdata.id = 2;
+        if(strcmp(message, 'off') == 0){
+            newdata.status = 'false';
+        }
+        else if(strcmp(message, 'on') == 0){
+            newdata.status = 'true';
+        }
+        var light ={
+            id: newdata.id,
+            status: newdata.status
+        };
+        if(newdata.id!=null && newdata.status!=null){
+            Light.findOneAndUpdate({id: newdata.id}, light, {upsert: true}, function(err, doc) {
+                if (err) console.log(err)
+            });
+        }
     }
-    const humidity = await Humidity.findOne({})
-    const hvalue = newdata.humidity
-    const time = newdata.time
-    if(!humidity){
-        var hum = new Humidity(null, null)
-        hum.generateValueandTime(hvalue, time)
+    if(strcmp(topic, humidityTopic) == 0){
+        // console.log(message.toString())
+        const hvalue = parseFloat(message.toString());
+        // console.log(hvalue)
+        io.sockets.emit('humidity', message.toString());
+        const humidity = await Humidity.findOne({})
+        if(!humidity){
+            var hum = new Humidity(null, null)
+            hum.generateValueandTime(hvalue, 0)
+        }
+        else{
+            humidity.generateValueandTime(hvalue, 0)
+            // for(var i =0; i<humidity.values.length; i++){
+            //     console.log(humidity.values[i].value)
+            // }
+        }
     }
-    else{
-        humidity.generateValueandTime(hvalue, time)
-        // for(var i =0; i<humidity.values.length; i++){
-        //     console.log(humidity.values[i].value)
-        // }
-    }
-
-    const temperature = await Temperature.findOne({})
-    const tvalue = newdata.temperature
-    if(!temperature){
-        var tem = new Temperature(null, null)
-        tem.generateValueandTime(tvalue, time)
-    }
-    else{
-        temperature.generateValueandTime(tvalue, time)
+    if(strcmp(topic, temperatureTopic) == 0){
+        // console.log(message.toString())
+        const tvalue = parseFloat(message.toString());
+        // console.log(tvalue)
+        io.sockets.emit('temperature', tvalue);
+        const temperature = await Temperature.findOne({})
+        if(!temperature){
+            var tem = new Temperature(null, null)
+            tem.generateValueandTime(tvalue, 0)
+        }
+        else{
+            temperature.generateValueandTime(tvalue, 0);
+        }
     }
 });
 
-mqttClient.sendMessage = function sendMessage(message){
-    mqttClient.publish(subtopic, JSON.stringify(message));
+mqttClient.sendLed1 = function sendMessage(message){
+    mqttClient.publish(led1SubTopic, JSON.stringify(message));
+}
+
+mqttClient.sendLed2 = function sendMessage(message){
+    mqttClient.publish(led2SubTopic, JSON.stringify(message));
 }
 
 module.exports = mqttClient;
