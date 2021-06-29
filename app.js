@@ -14,6 +14,9 @@ app.use(cors());
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
+app.use('/css', express.static(__dirname + 'public/css'))
+app.use('/js', express.static(__dirname + 'public/js'))
+app.use('/img', express.static(__dirname + 'public/img'))
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
@@ -162,7 +165,7 @@ io.on("connection", function(socket){
     // io.sockets.emit('Alldata', "parsedMessage");
 })
 
-app.get("/", function(req, res){
+app.get("", function(req, res){
     res.render("home")
 })
 

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+</head>
+<body>
+	<div id="container">
+		<p id="tle"><b>Smart Home</b></p>
+		<div id="div1" class="d">
+			<p class="title"><b>Nhiệt độ</b></p>
+			<div id="l_c">
+				<canvas id="linechart"></canvas>
+			</div>
+			<script type="text/javascript">
+				var cur = 5;
+				var bienx = [cur-4, cur-3, cur-2, cur-1, cur];
+				var bieny = [6,3,5,8,9];
+				var CHART = document.getElementById('linechart').getContext('2d');
+				var line_chart = new Chart(CHART, {
+					type: 'line',
+					data:{
+						labels: bienx,
+						datasets:[{
+							label: 'độ C',
+							data: bieny
+							}]
+					}
+				});
+			</script>
+		</div>
+		<div id="div2" class="d">
+			<p class="title"><b>Độ ẩm</b></p>
+			<div id="l_c">
+				<canvas id="linechart1"></canvas>
+			</div>
+			<script type="text/javascript">
+				var cur = 5;
+				var bienx = [cur-4, cur-3, cur-2, cur-1, cur];
+				var bieny = [2,3,7,4,9];
+				var CHART = document.getElementById('linechart1').getContext('2d');
+				var line_chart = new Chart(CHART, {
+					type: 'line',
+					data:{
+						labels: bienx,
+						datasets:[{
+							label: 'độ ẩm',
+							data: bieny
+							}]
+					}
+				});
+			</script>
+		</div>
+		<div id="div3" class="d">
+			<p id="den" class="title">
+				<b>Bật/Tắt đèn</b>
+				<span>
+					<label id="switch1" class="switch">
+					  <input id="check" type="checkbox" onclick="show()">
+					  <span class="slider round"></span>
+					</label>
+				</span>
+			</p>
+			<img id="lamp" src="images/lamp_off2.png">
+			<script type="text/javascript">
+				function show() {
+					if(document.getElementById("check").checked == true) {
+						document.getElementById("lamp").src="images/lamp_on2.png";
+					}
+					else {
+						document.getElementById("lamp").src="images/lamp_off2.png";
+					}
+				}
+			</script>
+		</div>
+		<div id="div4" class="d">
+			<p id="den" class="title">
+				<b>Bật/Tắt đèn</b>
+				<span>
+					<label id="switch1" class="switch">
+					  <input type="checkbox">
+					  <span class="slider round"></span>
+					</label>
+				</span>
+			</p>
+			<img src="images/lamp_on2.png">
+		</div>
+			
+		<!-- <div id="div2" class="d">
+			<p>Turn on the light</p>
+			<img src="images/bieu-do.png">
+		</div> -->
+		<!-- <div id="div3" class="d">
+			<p>Turn on the light</p>
+			<img src="images/nha-thong-minh.jpg">
+		</div>
+		<div id="div4" class="d">
+			<p>Turn on the light</p>
+			<img src="images/nha-thong-minh.jpg">
+		</div>
+ -->	</div>
+</body>
+
+</html>
