@@ -13,7 +13,7 @@ var mytopic = '/iot2021/pub'
 // var mqttClient = new mqttHandler();
 // mqttClient.connect();
 
-router.post("/send-mqtt/led/1", function(req, res) {
+router.post("/send-mqtt/led/1", auth,  function(req, res) {
     try{
         console.log(req.body.status)
         mqttClient.sendLed1((req.body.status));
@@ -24,7 +24,7 @@ router.post("/send-mqtt/led/1", function(req, res) {
     }
 });
 
-router.post("/send-mqtt/led/2", function(req, res) {
+router.post("/send-mqtt/led/2", auth, function(req, res) {
     try{
         console.log(req.body.status)
         mqttClient.sendLed2((req.body.status));

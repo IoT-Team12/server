@@ -14,7 +14,7 @@ body, html {
 #container{
 	width: 100%;
 	height: 100%;
-	background-image: url(http://localhost:3000/images/smart_city.jpg);
+	background-image: url(/images/smart_city.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 }

@@ -4,7 +4,7 @@
 	<title>Home</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="http://localhost:3000/css/index.css" />
+	<link rel="stylesheet" href="css/index.css" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-2.0.0.min.js"></script>
     <script src="socket.io/socket.io.js"></script>
@@ -79,17 +79,43 @@
 			<script type="text/javascript">
 				function show() {
 					if(document.getElementById("check").checked == true) {
-						document.getElementById("lamp").src="images/lamp_on2.png";
                         var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
 						var theUrl = "/api/datas/send-mqtt/led/1";
+						xmlhttp.onreadystatechange = function() {
+							if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+								console.log(xmlhttp.status)
+								if(xmlhttp.status == 401){
+									alert(xmlhttp.responseText + '\nYou must login');
+									document.getElementById("check").checked = false
+									// window.location.href = "/register"
+								}
+								else{
+									document.getElementById("lamp").src="images/lamp_on2.png";
+								}
+							}
+						}
 						xmlhttp.open("POST", theUrl);
 						xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						xmlhttp.send(JSON.stringify({ "status": "on"}));
+						
 					}
 					else {
 						document.getElementById("lamp").src="images/lamp_off2.png";
 						var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
 						var theUrl = "/api/datas/send-mqtt/led/1";
+						xmlhttp.onreadystatechange = function() {
+							if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+								console.log(xmlhttp.status)
+								if(xmlhttp.status == 401){
+									alert(xmlhttp.responseText + '\nYou must login');
+									document.getElementById("check").checked = true
+									// window.location.href = "/register"
+								}
+								else{
+									document.getElementById("lamp").src="images/lamp_off2.png";
+								}
+							}
+						}
 						xmlhttp.open("POST", theUrl);
 						xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 						xmlhttp.send(JSON.stringify({ "status": "off"}));

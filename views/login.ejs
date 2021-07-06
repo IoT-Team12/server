@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/login.css">
+</head>
+<body>
+	<div class="login">
+		<h2>Smart Home</h2>
+		<div id="enter1" class="enter">
+			<img src="images/email.PNG">
+			<input id="inp1" type="text" name="email" placeholder="email">
+		</div>
+		<div id="enter2" class="enter">
+			<img src="images/pass.PNG">
+			<input id="inp2" type="password" name="password" placeholder="password">
+		</div>
+		<button onclick='validateLogin()'>Login</button>
+		<!-- <p id="pp"></p> -->
+	</div>
+	<script type="text/javascript">
+		function validateLogin() {
+			let email = document.getElementById('inp1').value;
+			let password = document.getElementById('inp2').value;
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+            var theUrl = "/api/users/login";
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+                    if(xmlhttp.status == 400 || xmlhttp.status == 404){
+                        alert(xmlhttp.responseText);
+                        window.location.href = "/login"
+                    }
+                }
+            }
+            xmlhttp.open("POST", theUrl);
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.send(JSON.stringify({email:email, password:password}));
+            window.location.href = "/"
+		}
+		// function setP() {
+		// 	document.getElementById('pp').innerHTML = 'abc';
+		// }
+	</script>
+</body>
+</html>

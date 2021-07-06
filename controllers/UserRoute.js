@@ -6,7 +6,7 @@ const User = require('../models/User')
 const auth = require('./middleware/auth')
 
 router.post('/signup', async(req, res) => {
-    
+    console.log(req.body)
         const user = new User({
             username: req.body.username,
             password: req.body.password,
@@ -18,7 +18,7 @@ router.post('/signup', async(req, res) => {
         else if(!req.body.password){
             res.status(400).send("Invalid password")
         }
-        if(!req.body.email){
+        else if(!req.body.email){
             res.status(400).send("Invalid email")
         }
         else{
@@ -44,16 +44,17 @@ router.post('/login', async(req, res) => {
         const {email, password} = req.body;
         const user = await User.findOne({email: email})
         if(!user){
-            res.status(400).json({error: 'Wrong email/password'}).end()
+            res.status(400).send({error: 'Wrong email/password'})
         }
         else{
             var enpass = md5(password);
             if(enpass == user.password){
                 const token = await user.generateAuthToken()
+                res.cookie('token', token, { expires: new Date(Date.now() + 900000), httpOnly: true });
                 res.status(200).send([user, token])
             }
             else{
-                res.status(400).json({error: 'Wrong email/password'}).end()
+                res.status(400).send({error: 'Wrong email/password'})
             }
         }
     }

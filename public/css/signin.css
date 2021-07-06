@@ -1,0 +1,60 @@
+body{
+	/*background-color: #1c8ef8;*/
+	background-image: url(/images/smart_city.jpg);
+	font-family: sans-serif;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.login{
+
+	width: 350px;
+	height: 360px;
+	/*background-color: green;*/
+	text-align: center;
+	border:1px solid grey;
+	border-radius: 10px;
+	margin: 30px auto;
+	background-color: white;
+}
+button{
+	width: 250px;
+	height: 40px;
+	border-radius: 5px;
+	border:none;
+	background-color: #167bff;
+	color: white;
+	margin-top: 30px;
+}
+button:hover{
+	width: 240px;
+	height: 38px;
+}
+a{
+	float: right;
+	padding-right: 40px;
+	margin-top: 20px;
+	text-decoration: none;
+}
+.enter{
+	width: 250px;
+	height: auto;
+	border:1px solid #167bff;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.enter img{
+	width: 20px;
+	vertical-align: middle;;
+}
+.enter input{
+	border:none;
+	outline: none;
+	height: 30px;
+	width: 200px;
+	padding-left: 15px;
+	
+}
+
+

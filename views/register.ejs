@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Register</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/signin.css">
+</head>
+<body>
+	<div class="login">
+		<h2>Smart Home</h2>
+		<div id="enter1" class="enter">
+			<img src="images/user.PNG">
+			<input id="inp1" type="text" name="username" placeholder="username">
+		</div>
+		<div id="enter2" class="enter">
+			<img src="images/email.PNG">
+			<input id="inp2" type="text" name="email" placeholder="email">
+		</div>
+		<div id="enter3" class="enter">
+			<img src="images/pass.PNG">
+			<input id="inp3" type="password" name="password" placeholder="password">
+		</div>
+		<div id="enter4" class="enter">
+			<img src="images/pass.PNG">
+			<input id="inp4" type="password" name="password" placeholder="re-password">
+		</div>
+		<button onclick='validateLogin()'>Sign in</button>
+		<!-- <p id="pp"></p> -->
+	</div>
+	<script type="text/javascript">
+		function validateLogin() {
+			let username = document.getElementById('inp1').value;
+			let email = document.getElementById('inp2').value;
+			let password1 = document.getElementById('inp3').value;
+			let password2 = document.getElementById('inp4').value;
+			if (password2 != password1) {
+                alert('Two passwd must be the same')
+			}
+            else {
+                var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+                var theUrl = "/api/users/signup";
+				xmlhttp.onreadystatechange = function() {
+					if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+						if(xmlhttp.status == 400){
+							alert(xmlhttp.responseText);
+							// window.location.href = "/register"
+						}
+					}
+				}
+                xmlhttp.open("POST", theUrl);
+                xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                let username = document.getElementById('inp1').value;
+                let email = document.getElementById('inp2').value;
+                let password1 = document.getElementById('inp3').value;
+                let password2 = document.getElementById('inp4').value;
+				xmlhttp.send(JSON.stringify({ username: username, password: password1, email: email}));
+				window.location.href = "/"
+               
+            }
+		}
+
+	</script>
+</body>
+</html>
