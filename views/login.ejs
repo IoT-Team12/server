@@ -29,14 +29,15 @@
                 if (xmlhttp.readyState == XMLHttpRequest.DONE) {
                     if(xmlhttp.status == 400 || xmlhttp.status == 404){
                         alert(xmlhttp.responseText);
-                        window.location.href = "/login"
+                    }
+					if(xmlhttp.status == 200){
+                        window.location.href = "/";
                     }
                 }
             }
             xmlhttp.open("POST", theUrl);
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             xmlhttp.send(JSON.stringify({email:email, password:password}));
-            window.location.href = "/"
 		}
 		// function setP() {
 		// 	document.getElementById('pp').innerHTML = 'abc';

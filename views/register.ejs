@@ -43,7 +43,9 @@
 					if (xmlhttp.readyState == XMLHttpRequest.DONE) {
 						if(xmlhttp.status == 400){
 							alert(xmlhttp.responseText);
-							// window.location.href = "/register"
+						}
+						if(xmlhttp.status == 200){
+							window.location.href = "/"
 						}
 					}
 				}
@@ -53,9 +55,7 @@
                 let email = document.getElementById('inp2').value;
                 let password1 = document.getElementById('inp3').value;
                 let password2 = document.getElementById('inp4').value;
-				xmlhttp.send(JSON.stringify({ username: username, password: password1, email: email}));
-				window.location.href = "/"
-               
+				xmlhttp.send(JSON.stringify({ username: username, password: password1, email: email}));            
             }
 		}
 

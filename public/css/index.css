@@ -19,6 +19,18 @@ body, html {
 	background-size: cover;
 }
 
+#btnLogout{
+  margin-left: 600px;
+  background-color: white;
+  color: grey;
+  border-radius: 12px;
+}
+
+#logout{
+  font-size: 30px;
+}
+
+
 #tle{
 	font-size: 50px;
 	padding-left: 42%;
