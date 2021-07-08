@@ -24,6 +24,7 @@ router.post('/signup', async(req, res) => {
         else{
             try{
                 const token = await user.generateAuthToken()
+                res.cookie('token', token, { expires: new Date(Date.now() + 900000), httpOnly: true });
                 res.send([user, token])
             }
             catch(err){
@@ -77,7 +78,7 @@ router.post('/me/logout', auth, async (req, res) => {
             return token.token != req.token
         })
         await req.user.save()
-        res.send()
+        res.clearCookie('token').status(200).send();
     } catch (error) {
         res.status(500).send(error)
     }
