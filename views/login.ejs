@@ -1,31 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Login</title>
-	<meta charset="utf-8">
-	<link rel="stylesheet" type="text/css" href="css/login.css">
+	<title>IoT</title>
+	<link rel="stylesheet" type="text/css" href="css/dangnhap-dangky.css">
+	
 </head>
 <body>
-	<div class="login">
-		<h2>Smart Home</h2>
-		<div id="enter1" class="enter">
-			<img src="images/email.PNG">
-			<input id="inp1" type="text" name="email" placeholder="email">
+	<h2>Smart home</h2>
+	<div class="container" id="container">
+		<div class="form-container sign-up-container">
+			<form action="#">
+				<h1>Create Account</h1>
+				<div class="social-container">
+					<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+				</div>
+				<span>or use your email for registration</span>
+				<input id = 'inp1' type="text" placeholder="Name" />
+				<input id = 'inp2' type="email" placeholder="Email" />
+				<input id = 'inp3' type="password" placeholder="Password" />
+				<button onclick='validateRegister()'>Sign up</button>
+			</form>
 		</div>
-		<div id="enter2" class="enter">
-			<img src="images/pass.PNG">
-			<input id="inp2" type="password" name="password" placeholder="password">
+		<div class="form-container sign-in-container">
+			<form action="#">
+				<h1>Sign in</h1>
+				<div class="social-container">
+					<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+					<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+				</div>
+				<span>or use your account</span>
+				<input id = 'inp4' type="email" placeholder="Email" />
+				<input id = 'inp5' type="password" placeholder="Password" />
+				<a href="#">Forgot your password?</a>
+				<button onclick='validateLogin()'>Sign in</button>
+			</form>
 		</div>
-		<button onclick='validateLogin()'>Login</button>
-		<!-- <p id="pp"></p> -->
-	</div>
-	<script type="text/javascript">
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>Welcome Back!</h1>
+					<p>To keep connected with us please login with your personal info</p>
+					<button class="ghost" id="signIn">Sign In</button>
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>Hello, Friend!</h1>
+					<p>Enter your personal details and start journey with us</p>
+					<button class="ghost" id="signUp">Sign Up</button>
+				</div>
+			</div>
+		</div>
+</div>
+
+<script type="text/javascript">
+		const signUpButton = document.getElementById('signUp');
+		const signInButton = document.getElementById('signIn');
+		const container = document.getElementById('container');
+
+		signUpButton.addEventListener('click', () => {
+			container.classList.add("right-panel-active");
+		});
+
+		signInButton.addEventListener('click', () => {
+			container.classList.remove("right-panel-active");
+		});
+
+		function validateRegister() {
+			var username = document.getElementById('inp1').value;
+			var email = document.getElementById('inp2').value;
+			var password = document.getElementById('inp3').value;
+			var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+			var theUrl = "/api/users/signup";
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+					if(xmlhttp.status == 400){
+						alert(xmlhttp.responseText);
+					}
+					if(xmlhttp.status == 200){
+						window.location.href = "/"
+					}
+				}
+			}
+			xmlhttp.open("POST", theUrl);
+			xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+			username = document.getElementById('inp1').value;
+			email = document.getElementById('inp2').value;
+			password = document.getElementById('inp3').value;
+			xmlhttp.send(JSON.stringify({ username: username, password: password, email: email}));            
+		}
 		function validateLogin() {
-			let email = document.getElementById('inp1').value;
-			let password = document.getElementById('inp2').value;
+			var email = document.getElementById('inp4').value;
+			var password = document.getElementById('inp5').value;
             var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
             var theUrl = "/api/users/login";
             xmlhttp.onreadystatechange = function() {
+				console.log(xmlhttp.status);
                 if (xmlhttp.readyState == XMLHttpRequest.DONE) {
                     if(xmlhttp.status == 400 || xmlhttp.status == 404){
                         alert(xmlhttp.responseText);
@@ -37,11 +108,14 @@
             }
             xmlhttp.open("POST", theUrl);
             xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            xmlhttp.send(JSON.stringify({email:email, password:password}));
+			email = document.getElementById('inp4').value;
+			password = document.getElementById('inp5').value;
+            xmlhttp.send(JSON.stringify({email : email, password : password}));
 		}
-		// function setP() {
-		// 	document.getElementById('pp').innerHTML = 'abc';
-		// }
-	</script>
+		
+</script>
+
+
 </body>
 </html>
+
