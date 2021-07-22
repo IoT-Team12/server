@@ -212,6 +212,27 @@
 				
 			</script>
 		</div>
+			<!-- cảnh báo cháy -->
+		<div id="myModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+		
+		<p style="text-align: center; font-size: 28x;"><span class="close">&times;</span></p>
+		<img src="images/fire-97863_960_720.png" >
+			</div>
+	</div>
+	<script type="text/javascript">
+			var modal = document.getElementById("myModal");
+			var span = document.getElementsByClassName("close")[0];
+			
+			span.onclick = function() {
+				modal.style.display = "none";
+			}
+			var socket = io("http://localhost:3000")
+			socket.on('flame', function(data){
+				modal.style.display = "block";
+			})
+	</script>
 </body>
 
 </html>
