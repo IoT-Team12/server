@@ -6,7 +6,7 @@ const User = require('../models/User')
 const auth = require('./middleware/auth')
 
 router.post('/signup', async(req, res) => {
-    console.log(req.body)
+    //console.log(req.body)
         const user = new User({
             username: req.body.username,
             password: req.body.password,
@@ -63,7 +63,7 @@ router.post('/login', async(req, res) => {
 
 router.get('/me', auth, async(req, res) => {
     try{
-        console.log(req.token)
+       // console.log(req.token)
         res.send([req.user, req.token])
     } catch (error) {
         res.status(400).send(error)

@@ -154,31 +154,64 @@
 			</script>
 		</div>
 		<div id="div4" class="d">
-			<p id="den" class="title">
+			<p id="den2" class="title">
 				<b>Bật/Tắt đèn</b>
 				<span>
-					<label id="switch1" class="switch">
-					  <input type="checkbox">
+					<label id="switch2" class="switch">
+					  <input id="check2" type="checkbox" onclick="show2()">
 					  <span class="slider round"></span>
 					</label>
 				</span>
 			</p>
-			<img src="images/lamp_on2.png">
+			<img id="lamp2" src="http://localhost:3000/images/lamp_off2.png">
+			<script type="text/javascript">
+				function show2() {
+					if(document.getElementById("check2").checked == true) {
+                        var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+						var theUrl = "/api/datas/send-mqtt/led/2";
+						xmlhttp.onreadystatechange = function() {
+							if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+								console.log(xmlhttp.status)
+								if(xmlhttp.status == 401){
+									alert(xmlhttp.responseText + '\nYou must login');
+									document.getElementById("check2").checked = false
+									// window.location.href = "/register"
+								}
+								else{
+									document.getElementById("lamp2").src="images/lamp_on2.png";
+								}
+							}
+						}
+						xmlhttp.open("POST", theUrl);
+						xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+						xmlhttp.send(JSON.stringify({ "status": "on"}));
+						
+					}
+					else {
+						document.getElementById("lamp2").src="images/lamp_off2.png";
+						var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+						var theUrl = "/api/datas/send-mqtt/led/2";
+						xmlhttp.onreadystatechange = function() {
+							if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+								console.log(xmlhttp.status)
+								if(xmlhttp.status == 401){
+									alert(xmlhttp.responseText + '\nYou must login');
+									document.getElementById("check2").checked = true
+									// window.location.href = "/register"
+								}
+								else{
+									document.getElementById("lamp2").src="images/lamp_off2.png";
+								}
+							}
+						}
+						xmlhttp.open("POST", theUrl);
+						xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+						xmlhttp.send(JSON.stringify({ "status": "off"}));
+					}
+				}
+				
+			</script>
 		</div>
-			
-		<!-- <div id="div2" class="d">
-			<p>Turn on the light</p>
-			<img src="images/bieu-do.png">
-		</div> -->
-		<!-- <div id="div3" class="d">
-			<p>Turn on the light</p>
-			<img src="images/nha-thong-minh.jpg">
-		</div>
-		<div id="div4" class="d">
-			<p>Turn on the light</p>
-			<img src="images/nha-thong-minh.jpg">
-		</div>
- -->	</div>
 </body>
 
 </html>

@@ -9,7 +9,7 @@ const auth = async(req, res, next) => {
         var tmp = cookies[0];
         var tokens = tmp.split('=')
         var token = tokens[1]
-        console.log(token)
+        //console.log(token)
         // const token = req.header('Authorization').replace('Bearer ', '')
         const data = jwt.verify(token, process.env.JWT_KEY)
         const user = await User.findOne({ _id: data._id, 'tokens.token': token })

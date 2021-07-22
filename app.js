@@ -36,7 +36,9 @@ humidityTopic = 'group12/dht/humidity'
 led1Topic = 'group12/led/1'
 led2Topic = 'group12/led/2'
 led1SubTopic = 'group12/led/1/pub'
-led2SubTopic = 'group12/led/2/pub'
+led2SubTopic = 'group12/led/2/pub' 
+flameTopic  ='group12/flame'
+firTopic = 'group12/fir'
 
 mqttClient.on('connect', () => {
     console.log('Mqtt connected.')
@@ -44,6 +46,8 @@ mqttClient.on('connect', () => {
     mqttClient.subscribe(humidityTopic, {qos: 0});
     mqttClient.subscribe(led1Topic, {qos: 0});
     mqttClient.subscribe(led2Topic, {qos: 0});
+    mqttClient.subscribe(flameTopic, {qos: 0});
+    mqttClient.subscribe(firTopic, {qos: 0});
 })
 
 mqttClient.on('offline', () => {
@@ -56,6 +60,13 @@ mqttClient.on('error', (err) => {
   });
 
 mqttClient.on('message', async function (topic, message) {  
+   if(strcmp(topic, flameTopic) == 0){
+        io.sockets.emit('flame', 'Fire Warning');
+   }
+   if(strcmp(topic, firTopic) == 0){
+        this.sendLed1('on');
+        this.sendLed2('on');
+    }
    if(strcmp(topic, led1Topic) == 0){
         // console.log(message.toString())
         // io.sockets.emit('humidity', parsedMessage.humidity);
